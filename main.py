@@ -39,3 +39,4 @@ async def update_info(token: Annotated[str, Depends(oauth2_scheme)], newInfo: In
     check_info()
     currentState.currentIP = newInfo.ip
     currentState.lastUpdated = datetime.now()
+    return currentState
