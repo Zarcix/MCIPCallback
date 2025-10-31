@@ -27,7 +27,7 @@ def read_root():
         "lastUpdated": currentState.lastUpdated.strftime("%d %B, %Y %H:%M:%S") if currentState.lastUpdated != None else None
     }
 
-@app.patch("/update/")
+@app.patch("/update/", status_code=200)
 async def update_info(token: Annotated[str, Depends(oauth2_scheme)], newInfo: InfoPacket):
     if token != secretKey:
         raise HTTPException(
