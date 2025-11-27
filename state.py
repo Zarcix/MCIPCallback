@@ -1,5 +1,5 @@
 from datetime import datetime
 
 class MinecraftState():
-    currentIP = ""
+    player_list: list[str] = []
     lastUpdated: datetime | None = None
