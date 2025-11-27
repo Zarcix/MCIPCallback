@@ -33,8 +33,7 @@ async def update_info(token: Annotated[str, Depends(oauth2_scheme)], newInfo: In
         )
 
     # Prereq Checks
-    assert type(newInfo.player_list) is str
-    assert "Connected players:" in newInfo.player_list
+    if not "Connected players:" in newInfo.player_list: raise HTTPException(status_code=400, detail="Invalid Payload. Not a list of players.")
 
     raw_player_string = newInfo.player_list
     player_string = raw_player_string.split("Connected players:")[1]
