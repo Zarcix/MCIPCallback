@@ -29,6 +29,10 @@ def read_root():
 
     return state_dict
 
+@app.get("/player_list")
+def get_player_list():
+    return currentState.player_list
+
 @app.patch("/update/player_list", status_code=200)
 async def update_player_info(token: Annotated[str, Depends(oauth2_scheme)], newInfo: PlayerListPacket):
     if token != secretKey:
@@ -47,6 +51,10 @@ async def update_player_info(token: Annotated[str, Depends(oauth2_scheme)], newI
     currentState.player_list = player_list
     currentState.lastUpdated = datetime.now()
     return currentState.player_list
+
+@app.get("/tps_list")
+def get_server_tps():
+    return currentState.tps
 
 @app.patch("/update/tps_list", status_code=200)
 async def update_server_tps(token: Annotated[str, Depends(oauth2_scheme)], newInfo: ServerTPSPacket):
