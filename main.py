@@ -45,7 +45,7 @@ async def update_player_info(token: Annotated[str, Depends(oauth2_scheme)], newI
     currentState.lastUpdated = datetime.now()
     return currentState.player_list
 
-@app.patch("/update/server_tps", status_code=200)
+@app.patch("/update/tps_list", status_code=200)
 async def update_server_tps(token: Annotated[str, Depends(oauth2_scheme)], newInfo: ServerTPSPacket):
     if token != secretKey:
         raise HTTPException(
