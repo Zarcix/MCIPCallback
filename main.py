@@ -52,8 +52,9 @@ async def update_server_tps(token: Annotated[str, Depends(oauth2_scheme)], newIn
             status_code=401
         )
 
-    print(f"Got TPS List - '{newInfo.tps_list}'")
-    tps_list = list(filter(lambda n: n != "", newInfo.tps_list.split(" ")))
+    tps_raw_clean = newInfo.tps_list.strip()
+    print(f"Got TPS List - '{tps_raw_clean}'")
+    tps_list = list(filter(lambda n: n != "", tps_raw_clean.split(" ")))
     if not tps_list:
         raise HTTPException(status_code=400, detail="Invalid TPS List. No TPS found in data.")
 
