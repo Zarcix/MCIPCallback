@@ -18,13 +18,16 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 @app.get("/")
 def read_root():
-    player_list = currentState.player_list
+    state_dict = currentState.asdict()
+
     mcHealth = currentState.lastUpdated != None and (datetime.now() - currentState.lastUpdated) <= timedelta(minutes=1)
-    return {
-        "player_list": player_list,
-        "healthy": mcHealth,
-        "lastUpdated": currentState.lastUpdated.strftime("%d %B, %Y %H:%M:%S") if currentState.lastUpdated != None else None
-    }
+    state_dict.update(
+        {
+            "healthy": mcHealth
+        }
+    )
+
+    return state_dict
 
 @app.patch("/update/player_list", status_code=200)
 async def update_player_info(token: Annotated[str, Depends(oauth2_scheme)], newInfo: PlayerListPacket):
@@ -62,5 +65,7 @@ async def update_server_tps(token: Annotated[str, Depends(oauth2_scheme)], newIn
     for tps in tps_list:
         tps_interval, tps_value = tps.split(":")
         currentState.tps.update({tps_interval: tps_value})
+
+    currentState.lastUpdated = datetime.now()
 
     return currentState.tps
